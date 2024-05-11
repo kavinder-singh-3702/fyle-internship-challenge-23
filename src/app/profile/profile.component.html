@@ -1,0 +1,64 @@
+<article class="bg-white p-5 rounded shadow shadow-emerald-300">
+  <div class="flex items-center">
+    <img
+      [src]="owner.avatar_url"
+      [alt]="owner.login"
+      class="w-[5vh] h-[5vh] shadow rounded-full"
+    />
+    <ul class="ml-5">
+      <div>
+        <p class="mr-2">{{ name }}</p>
+        <p
+          [class]="
+            private
+              ? 'bg-rose-700 py-1 px-2 rounded-lg shadow text-white text-xs inline-block opacity-75'
+              : 'bg-emerald-700 py-1 px-2 rounded-lg shadow text-white text-xs inline-block opacity-75'
+          "
+        >
+          {{ private ? "Private" : "Public" }}
+        </p>
+      </div>
+    </ul>
+  </div>
+
+  <div>
+    <p class="mt-5">
+      This repository was created on {{ formatDate(created_at) }} by
+      {{ owner.login }}
+    </p>
+  </div>
+
+  <div class="mt-5 flex items-center justify-between text-right">
+    <a
+      class="underline text-sm"
+      [href]="html_url"
+      target="_blank"
+      rel="noreferrer"
+      >View Repo</a
+    >
+    <ul>
+      <li>{{ stargazers_count | number }} stars</li>
+      <li>{{ watchers_count | number }} Watchers</li>
+    </ul>
+  </div>
+
+  <div class="flex items-center justify-between flex-wrap mt-5">
+    <ul class="text-xs flex items-center justify-start">
+      <li
+        class="py-1 px-2 text-white bg-emerald-700 opacity-75 rounded-lg shadow inline-block mr-2"
+      >
+        {{ language }}
+      </li>
+
+      <ng-container *ngFor="let topic of topics">
+        <li
+          class="py-1 px-2 text-white bg-emerald-700 opacity-75 rounded-lg shadow inline-block mr-2"
+        >
+          {{ topic }}
+        </li>
+      </ng-container>
+    </ul>
+
+    <p>{{ open_issues }} issues</p>
+  </div>
+</article>
