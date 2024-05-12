@@ -24,10 +24,10 @@
   </button>
 </div>
 
-<app-loading *ngIf="loading"></app-loading>
+<ng-container>
+  <app-skeleton-loader *ngIf="loading"></app-skeleton-loader>
 
-<ng-container *ngIf="!loading">
-  <div *ngIf="repos && repos.length > 0" class="grid-cols-2 grid">
+  <div *ngIf="repos && repos.length > 0 && !loading" class="grid-cols-2 grid">
     <app-profile
       *ngFor="let repo of repos"
       [owner]="repo.owner"
@@ -52,22 +52,33 @@
     <button
       class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-l focus:outline-none focus:shadow-outline"
       (click)="prevPage()"
+      [class.opacity-50]="currentPage === 1"
+      [disabled]="currentPage === 1"
     >
       Previous
     </button>
-    <span class="px-4">Page {{ currentPage }}</span>
+    <!-- Generate buttons for each page -->
+    <ng-container *ngFor="let page of pagesArray">
+      <button
+        class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 focus:outline-none focus:shadow-outline"
+        [class.opacity-50]="currentPage === page"
+        [disabled]="currentPage === page"
+        (click)="goToPage(page)"
+      >
+        {{ page }}
+      </button>
+    </ng-container>
     <button
       class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-r focus:outline-none focus:shadow-outline"
       (click)="nextPage()"
+      [class.opacity-50]="currentPage === totalPages"
+      [disabled]="currentPage === totalPages"
     >
       Next
     </button>
   </div>
 
-  <div
-    *ngIf="repos && repos.length === 0 && user && loading"
-    class="text-red-500 text-center text-2xl"
-  >
-    No repositories found.
+  <div *ngIf="error" class="text-red-500 text-center text-2xl">
+    No repositories found Check Username
   </div>
 </ng-container>

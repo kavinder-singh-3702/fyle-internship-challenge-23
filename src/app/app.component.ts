@@ -27,6 +27,8 @@ interface Repo {
 })
 export class AppComponent implements OnInit {
   user: string = ''; // Initialize user as empty string
+  pagesArray: number[] = [];
+
   totalRepos: number = 0;
   repos: Repo[] = [];
   loading: boolean = false;
@@ -38,6 +40,7 @@ export class AppComponent implements OnInit {
   filteredRepos: Repo[] = [];
   // noOfPages: number = 5;
   totalPages: number = 0; // Add totalPages property
+  error: string = '';
 
   constructor(private apiService: ApiService) {}
 
@@ -53,6 +56,7 @@ export class AppComponent implements OnInit {
         this.repos = data;
         this.loading = false;
         this.totalPages = Math.ceil(this.totalRepos / this.pageSize); // Calculate totalPages
+        this.calculatePagesArray();
         console.log('total ', this.totalPages);
       },
       (error) => {
@@ -61,7 +65,14 @@ export class AppComponent implements OnInit {
       }
     );
   }
-
+  calculatePagesArray() {
+    const startPage = Math.max(1, this.currentPage - 2);
+    const endPage = Math.min(this.totalPages, startPage + 4);
+    this.pagesArray = Array.from(
+      { length: endPage - startPage + 1 },
+      (_, i) => startPage + i
+    );
+  }
   fetchUser() {
     this.apiService.getUser(this.user).subscribe(
       (data) => {
@@ -70,6 +81,7 @@ export class AppComponent implements OnInit {
       },
       (error) => {
         console.log('Error fetching repositories:', error);
+        this.error = error;
         this.loading = false;
       }
     );
@@ -98,5 +110,13 @@ export class AppComponent implements OnInit {
   }
   updatePage() {
     this.fetchRepos();
+  }
+
+  // Method to navigate to a specific page
+  goToPage(page: number) {
+    if (page !== this.currentPage) {
+      this.currentPage = page;
+      this.fetchRepos(); // Fetch repositories for the selected page
+    }
   }
 }
