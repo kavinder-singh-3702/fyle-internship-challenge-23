@@ -16,6 +16,7 @@ export class ProfileComponent {
   @Input() language!: string;
   @Input() topics!: string[];
   @Input() open_issues!: number;
+  @Input() description!: string;
 
   formatDate(dateString: string): string {
     return new Date(dateString).toLocaleDateString('en-US', {

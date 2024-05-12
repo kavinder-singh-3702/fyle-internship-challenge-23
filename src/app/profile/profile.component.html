@@ -1,4 +1,4 @@
-<article class="bg-white p-5 rounded shadow shadow-emerald-300">
+<article class="bg-white px-10 py-10 rounded shadow-md shadow-purple-600">
   <div class="flex items-center">
     <img
       [src]="owner.avatar_url"
@@ -7,7 +7,7 @@
     />
     <ul class="ml-5">
       <div>
-        <p class="mr-2">{{ name }}</p>
+        <h1 class="mr-2 text-xl font-bold">{{ name }}</h1>
         <p
           [class]="
             private
@@ -22,10 +22,7 @@
   </div>
 
   <div>
-    <p class="mt-5">
-      This repository was created on {{ formatDate(created_at) }} by
-      {{ owner.login }}
-    </p>
+    <p class="mt-5">{{ description }}</p>
   </div>
 
   <div class="mt-5 flex items-center justify-between text-right">
@@ -36,16 +33,18 @@
       rel="noreferrer"
       >View Repo</a
     >
-    <ul>
+    <ul class="text-left">
       <li>{{ stargazers_count | number }} stars</li>
       <li>{{ watchers_count | number }} Watchers</li>
+      <p>{{ open_issues }} issues</p>
     </ul>
   </div>
 
   <div class="flex items-center justify-between flex-wrap mt-5">
     <ul class="text-xs flex items-center justify-start">
       <li
-        class="py-1 px-2 text-white bg-emerald-700 opacity-75 rounded-lg shadow inline-block mr-2"
+        *ngIf="language"
+        class="py-1 px-2 text-white bg-blue-500 opacity-75 rounded-lg shadow inline-block mr-2"
       >
         {{ language }}
       </li>
@@ -58,7 +57,8 @@
         </li>
       </ng-container>
     </ul>
-
-    <p>{{ open_issues }} issues</p>
   </div>
+  <p class="mt-5">
+    This repository was created on {{ formatDate(created_at) }}
+  </p>
 </article>

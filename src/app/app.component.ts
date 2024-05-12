@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { ApiService } from './services/api.service';
 
 interface Repo {
+  status: string;
+  serviceName: string;
   owner: {
     avatar_url: string;
     login: string;
@@ -15,6 +17,7 @@ interface Repo {
   language: string;
   topics: string[];
   open_issues: number;
+  description: string;
 }
 
 @Component({
@@ -23,27 +26,77 @@ interface Repo {
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent implements OnInit {
-  user: string = 'kavinder-singh-3702';
+  user: string = ''; // Initialize user as empty string
+  totalRepos: number = 0;
   repos: Repo[] = [];
-  loading: boolean = true;
+  loading: boolean = false;
   pageSize: number = 10;
+  currentPage: number = 1;
+  selectedTenant: any;
+  reposervice: any;
+  toastr: any;
+  filteredRepos: Repo[] = [];
+  // noOfPages: number = 5;
+  totalPages: number = 0; // Add totalPages property
+
   constructor(private apiService: ApiService) {}
 
   ngOnInit() {
-    this.fetchRepos();
+    this.updatePage();
   }
 
   fetchRepos() {
-    this.apiService.getRepos(this.user, this.pageSize).subscribe(
+    const offset = (this.currentPage - 1) * this.pageSize;
+    this.apiService.getRepos(this.user, this.pageSize, offset).subscribe(
       (data) => {
         console.log(data);
         this.repos = data;
         this.loading = false;
+        this.totalPages = Math.ceil(this.totalRepos / this.pageSize); // Calculate totalPages
+        console.log('total ', this.totalPages);
       },
       (error) => {
         console.log('Error fetching repositories:', error);
         this.loading = false;
       }
     );
+  }
+
+  fetchUser() {
+    this.apiService.getUser(this.user).subscribe(
+      (data) => {
+        console.log(data);
+        this.totalRepos = data.public_repos;
+      },
+      (error) => {
+        console.log('Error fetching repositories:', error);
+        this.loading = false;
+      }
+    );
+  }
+
+  prevPage() {
+    if (this.currentPage > 1) {
+      this.currentPage--;
+      this.updatePage();
+    }
+  }
+
+  nextPage() {
+    const totalPages = Math.ceil(this.totalRepos / this.pageSize);
+    if (this.currentPage < totalPages) {
+      this.currentPage++;
+      this.updatePage();
+    }
+  }
+
+  onSearch(username: string) {
+    this.user = username;
+    this.currentPage = 1;
+    this.updatePage();
+  }
+  updatePage() {
+    this.fetchRepos();
+    this.fetchUser();
   }
 }
