@@ -9,7 +9,12 @@ import { ProfileComponent } from './profile/profile.component';
 import { SearchComponent } from './search/search.component';
 
 @NgModule({
-  declarations: [AppComponent, LoadingComponent, ProfileComponent, SearchComponent],
+  declarations: [
+    AppComponent,
+    LoadingComponent,
+    ProfileComponent,
+    SearchComponent,
+  ],
   imports: [BrowserModule, HttpClientModule, FormsModule],
   providers: [],
   bootstrap: [AppComponent],

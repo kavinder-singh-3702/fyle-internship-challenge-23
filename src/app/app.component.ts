@@ -46,7 +46,7 @@ export class AppComponent implements OnInit {
   }
 
   fetchRepos() {
-    const offset = (this.currentPage - 1) * this.pageSize;
+    const offset = this.currentPage;
     this.apiService.getRepos(this.user, this.pageSize, offset).subscribe(
       (data) => {
         console.log(data);
@@ -94,9 +94,9 @@ export class AppComponent implements OnInit {
     this.user = username;
     this.currentPage = 1;
     this.updatePage();
+    this.fetchUser();
   }
   updatePage() {
     this.fetchRepos();
-    this.fetchUser();
   }
 }

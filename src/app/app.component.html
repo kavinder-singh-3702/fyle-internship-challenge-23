@@ -57,7 +57,6 @@
     </button>
     <span class="px-4">Page {{ currentPage }}</span>
     <button
-      *ngIf="currentPage < totalPages"
       class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-r focus:outline-none focus:shadow-outline"
       (click)="nextPage()"
     >
